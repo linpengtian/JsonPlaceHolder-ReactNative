@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {ScrollView, Text, StyleSheet, View} from 'react-native';
-import {Loader} from '../../components/common/Loader';
+import {Loader} from '../../components/common';
 import {CommentList} from '../../components/comment';
 
 const PostDetail = ({route}) => {
@@ -20,7 +20,7 @@ const PostDetail = ({route}) => {
     if (post && user && comments) {
       setReady(true);
     }
-  }, [comments, post]);
+  }, [comments, post, user]);
 
   const fetchGetByIdPost = async id => {
     const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
@@ -32,7 +32,6 @@ const PostDetail = ({route}) => {
   const fetchGetUserById = async id => {
     const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
     const fetchUser = await res.json();
-    console.log(fetchUser);
     setUser(fetchUser);
   }
 
