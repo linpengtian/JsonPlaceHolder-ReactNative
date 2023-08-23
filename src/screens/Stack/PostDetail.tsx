@@ -2,18 +2,18 @@ import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {ScrollView, Text, StyleSheet, View} from 'react-native';
 import {Loader} from '../../components/common';
 import {CommentList} from '../../components/comment';
+import { IComment, IPost, IUser } from '../../components/interfaces';
 
-const PostDetail = ({route}) => {
+const PostDetail = ({route} : any) => {
   const {postId} = route.params;
 
-  const [post, setPost] = useState();
-  const [user, setUser] = useState();
-  const [comments, setComments] = useState();
-  const [isReady, setReady] = useState(false);
+  const [post, setPost] = useState<IPost>();
+  const [user, setUser] = useState<IUser>();
+  const [comments, setComments] = useState<IComment>();
+  const [isReady, setReady] = useState<boolean>(false);
 
   useLayoutEffect(() => {
     fetchGetByIdPost(postId);
-    fetchGetByIdComments(postId);
   }, [postId]);
 
   useEffect(() => {
@@ -22,20 +22,21 @@ const PostDetail = ({route}) => {
     }
   }, [comments, post, user]);
 
-  const fetchGetByIdPost = async id => {
+  const fetchGetByIdPost = async(id: number) => {
     const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
     const fetchPost = await res.json();
     setPost(fetchPost);
-    fetchGetUserById(fetchPost.userId);
+    await fetchGetUserById(fetchPost.userId);
+    await fetchGetByIdComments(postId);
   };
 
-  const fetchGetUserById = async id => {
+  const fetchGetUserById = async(id: number) => {
     const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`);
     const fetchUser = await res.json();
     setUser(fetchUser);
   }
 
-  const fetchGetByIdComments = async id => {
+  const fetchGetByIdComments = async(id: number) => {
     const res = await fetch(
       `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
     );
@@ -47,9 +48,9 @@ const PostDetail = ({route}) => {
     <ScrollView style={styles.container}>
       {isReady ? (
         <View>
-          <Text style={styles.title}>{post.title.toUpperCase()}</Text>
-          <Text style={styles.body}>{post.body}</Text>
-          <Text style={styles.username}>by {user.name}({user.email})</Text>
+          <Text style={styles.titleText}>{post?.title.toUpperCase()}</Text>
+          <Text style={styles.bodyText}>{post?.body}</Text>
+          <Text style={styles.username}>by {user?.name}({user?.email})</Text>
           <Text style={styles.commentsTitle}>Commnets</Text>
           <CommentList comments={comments} />
         </View>
@@ -65,22 +66,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  title: {
+  titleText: {
     marginLeft: 12,
     fontSize: 24,
     fontWeight: 'bold',
     marginTop: 12,
   },
-  body: {
+  bodyText: {
     marginLeft: 12,
     fontSize: 18,
-    fontWeight: '200',
     marginTop: 12,
   },
   username: {
     marginLeft: 12,
     fontSize: 16,
-    fontWeight: '300',
     fontStyle: 'italic',
     marginTop: 12,
   },

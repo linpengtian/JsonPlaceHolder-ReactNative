@@ -2,9 +2,10 @@ import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Loader} from '../../components/common';
 import {PostList} from '../../components/post';
+import { IPost } from '../../components/interfaces';
 
-const Main = ({navigation}) => {
-  const [posts, setPosts] = useState();
+const Main = ({navigation}: any) => {
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   useEffect(() => {
     getAllPost();
@@ -16,12 +17,12 @@ const Main = ({navigation}) => {
     setPosts(fetchPosts);
   };
 
-  const goToDetail = id => {
+  const goToDetail = (id: number) => {
     navigation.navigate('PostDetailStack', {postId: id});
   };
 
-  const onFavorite = id => {
-    setPosts(posts.map(post => {
+  const onFavorite = (id: number) => {
+    setPosts(posts.map((post) => {
       if (post.id === id) {
         if (post.like == true) {
           return {...post, like: false};
@@ -34,21 +35,21 @@ const Main = ({navigation}) => {
   }
 
 
-  const onDelete = async(id) => {
+  const onDelete = async(id: number) => {
     const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
       method: 'DELETE',
     });
     const result = await res.json();
     console.log(result);
 
-    setPosts(posts => {
-      return posts.filter(post => post.id !== id);
+    setPosts((posts) => {
+      return posts.filter((post) => post.id !== id);
     })
   }
 
   const onHideUnfavorites = () => {
-    setPosts(posts => {
-      return posts.filter(post => post.like === true);
+    setPosts((posts) => {
+      return posts.filter((post) => post.like === true);
     })
   }
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import { IComment } from '../interfaces/index';
 
-const CommentList = ({comments}) => {
-  return comments.map(comment => (
+const CommentList = ({comments}: any) => {
+  return comments.map((comment: IComment) => (
     <View style={styles.container} key={comment.id}>
       <Text style={styles.name}>{comment.name.toUpperCase()}</Text>
       <Text style={styles.body}>{comment.body}</Text>

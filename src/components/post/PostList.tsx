@@ -1,13 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import { IPost } from '../interfaces';
 
 const favorite_icon = require('../../../assets/favorite.png');
 const unfavorite_icon = require('../../../assets/unfavorite.png');
 const delete_icon = require('../../../assets/delete.png');
 
-const PostList = ({posts, onPress, onFavorite, onDelete}) => {
+const PostList = ({posts, onPress, onFavorite, onDelete}: any) => {
   //console.log(posts);
-  return posts.map(post => (
+  return posts.map((post: IPost) => (
     <TouchableOpacity onPress={() => onPress(post.id)} key={post.id}>
       <View style={styles.contaniner}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
